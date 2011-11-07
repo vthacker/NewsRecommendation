@@ -75,7 +75,7 @@ public class GenUsers {
 
   
   //TODO improve this method to check if file exists
-  private static boolean linkexists(String link) {
+  public static boolean linkexists(String link) {
     try {
       FileReader f = new FileReader("/home/varun/mahout/reuters-out/"+link);
       f.close();

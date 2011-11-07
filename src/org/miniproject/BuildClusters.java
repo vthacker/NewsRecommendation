@@ -54,7 +54,7 @@ public class BuildClusters {
    */
   
   public ArrayList<Integer> topMatches(int user) throws IOException {
-    int count =0;
+    int count = 0;
 
     FileReader userRecords;
     userRecords = new FileReader("/home/varun/mahout/genusers/"+Integer.toString(user));
