@@ -61,13 +61,13 @@ public class BuildRecommendation {
     return false;
   }
   
-  public ArrayList<String> generateCanditate() throws IOException {
+  public void generateCanditate() throws IOException {
     //TODO this is the same code as the generateFunction in GenUsers without the file i/o. decouple it and use that.
     // example input file
     // reut2-021.sgm-499.txt
     // 000-021 and 000 to 999
     ArrayList<Integer> list = new ArrayList<Integer>(GenUsers.numberOfUsers);
-    ArrayList<String> candidate = new ArrayList<String>();
+    FileWriter users = new FileWriter("/home/varun/mahout/candidate/1");
     for(int i = 0; i < 999; i++)
     {
       list.add(i);
@@ -90,10 +90,10 @@ public class BuildRecommendation {
         link +=".txt";  //adds .txt
         
         if (GenUsers.linkexists(link)) {
-          candidate.add(link);
+          users.write(link+"\n");
         }
       }
-    return candidate;
+    users.close();
     }
 
   
@@ -145,10 +145,10 @@ public class BuildRecommendation {
   }
   
 
-  private ArrayList<String> buildCandidateGeneration(int user) throws IOException {
+  private void buildCandidateGeneration(int user) throws IOException {
     //TODO use the twitter trends API call among other stuff to build candidate generation
     //Currently I will assume that a randomly generated set of say 50 stories will serve as the Candidate Generator
-    return (generateCanditate());
+    generateCanditate();
     
   }
   public ArrayList<String> recommend(int user) throws IOException {
@@ -157,7 +157,17 @@ public class BuildRecommendation {
     ArrayList<Integer> userCluster = new ArrayList<Integer> ();
     ArrayList<String> reco = new ArrayList<String>();
     
-    candidate =  buildCandidateGeneration(user);
+    buildCandidateGeneration(user);
+    
+    FileReader itemRecords = new FileReader("/home/varun/mahout/candidate/1");
+    BufferedReader br = new BufferedReader(itemRecords);
+    String s;
+    while((s = br.readLine()) != null) {
+      candidate.add(s);
+    }
+    br.close();
+    itemRecords.close();
+    
     userCluster =  findUserCluster(user);
     for (String story : candidate) {
       itemCluster = findItemCluster(story);
