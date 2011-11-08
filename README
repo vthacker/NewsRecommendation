@@ -1,0 +1,13 @@
+This is a very basic recommendaion engine.
+
+Data set used: REUTERS data set
+
+I have also used Apache Mahout
+
+Item clustering is done via MinHash algorithm from Mahout.
+
+User clustering is custom written and I will try to figure out how to use Mahout.
+
+Recommendation engine is also very basic and custom written. Not sure how to use the Taste library from Mahout.
+
+This is a very basic implementation done over a weekend. Feel free to comment. There will be lots of improvemts in the future!!
