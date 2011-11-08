@@ -69,8 +69,13 @@ public class GenUsers {
   
   public static void main(String args[]) throws IOException, InterruptedException {
     //generate();
-    BuildClusters bc = new BuildClusters();
-    bc.build();
+    //BuildClusters bc = new BuildClusters();
+    //bc.build();
+    BuildRecommendation br = new BuildRecommendation();
+    ArrayList<String> rec  = new ArrayList<String>(br.recommend(1));
+    for (String s: rec) {
+      System.out.println(s);
+    }
   }
 
   

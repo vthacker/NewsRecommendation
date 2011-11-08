@@ -28,10 +28,36 @@ import java.util.Collections;
 
 public class BuildRecommendation {
   
-  private static int numberOfCandidateStories = 40;
+  private static int numberOfCandidateStories = 50;
   
-  private boolean worthRecommending(ArrayList<Integer> userCluster, ArrayList<String> itemCluster) {
-    // TODO Auto-generated method stub
+  private boolean worthRecommending(ArrayList<Integer> userCluster, ArrayList<String> itemCluster) throws NumberFormatException, IOException {
+    int count = 0;
+    String s;
+    FileReader userRecords;
+    BufferedReader br;
+    // for every item in each user of user cluster
+    // check if story matches against cluster stories
+    // increment count
+    for (int u : userCluster) {
+
+      userRecords = new FileReader("/home/varun/mahout/genusers/"+Integer.toString(u));
+      br = new BufferedReader(userRecords);
+      
+      while((s = br.readLine()) != null) {
+        
+        for (String i : itemCluster) {
+          if ( s.equals(i)) {
+            count ++;
+          }
+        }
+      }
+      br.close();
+      userRecords.close();
+    }
+    
+    if (count > (userCluster.size()*itemCluster.size()/2) )
+      return true;
+    
     return false;
   }
   
@@ -85,30 +111,31 @@ public class BuildRecommendation {
   }
   
   private ArrayList<String> findItemCluster(String story) throws IOException {
-    
     //TODO improve efficiency of the method use to find all stories in cluster
     FileReader itemRecords;
-    itemRecords = new FileReader("/home/varun/mahout/MinHash/part-r-00000");
+    itemRecords = new FileReader("/home/varun/mahout/minhash/part-r-00000");
     BufferedReader br;
     br = new BufferedReader(itemRecords);
     ArrayList<String> itemCluster = new ArrayList<String>();
-    String s, cid[], clusterNumber = null;
+    String s, clusterNumber = null;
+    String cid[] = new String[2];
     while((s = br.readLine()) != null) {
-      cid = s.split(" ");
-      if ( cid[1].equals(story))
-        clusterNumber = cid[0];
+      cid = s.split("\\s");
+      if (cid[1].equals("/"+story)) {
+        clusterNumber = cid[0];;
+      }
+        
     }
     br.close();
     itemRecords.close();
-    
-    itemRecords = new FileReader("/home/varun/mahout/MinHash/part-r-00000");
+    itemRecords = new FileReader("/home/varun/mahout/minhash/part-r-00000");
     br = new BufferedReader(itemRecords);
     
     if (clusterNumber == null) 
       return null;
     
     while((s = br.readLine()) != null) {
-      cid = s.split(" ");
+      cid = s.split("\\s");
       if ( cid[0].equals(clusterNumber)) {
           itemCluster.add(cid[1]);
       }
@@ -138,6 +165,7 @@ public class BuildRecommendation {
         reco.add(story);        
       }
     }
+    System.out.println(reco.size());
     return reco;
   }
   
